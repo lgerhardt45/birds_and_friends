@@ -56,7 +56,7 @@ class PostWidget extends StatelessWidget {
               ],
             )
           ]),
-          SizedBox(height: 8),
+          SizedBox(height: 4),
           SizedBox(
             height: 200, // Ensure the gallery has a fixed height
             child: PostObservationGallery(
@@ -67,23 +67,34 @@ class PostWidget extends StatelessWidget {
           ),
           Row(
             // Interaction buttons
-            children: [],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: RichText(
-              text: TextSpan(
-                style: TextStyle(fontSize: 16, color: Colors.black),
-                children: [
-                  TextSpan(
-                    text: '${user?.firstName ?? ''} ',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: post.caption,
-                  ),
-                ],
+            children: [
+              IconButton(
+                icon: Icon(Icons.thumb_up_sharp),
+                onPressed: () {
+                  // Handle like button press
+                },
               ),
+              IconButton(
+                icon: Icon(Icons.comment),
+                onPressed: () {
+                  // Handle comment button press
+                },
+              ),
+            ],
+          ),
+          SizedBox(height: 4),
+          RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 16, color: Colors.black),
+              children: [
+                TextSpan(
+                  text: '${user?.firstName ?? ''} ',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: post.caption,
+                ),
+              ],
             ),
           ),
         ],
