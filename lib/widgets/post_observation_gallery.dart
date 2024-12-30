@@ -23,6 +23,7 @@ class PostObservationGallery extends StatelessWidget {
           final observation = observations[index];
           final bird = birdMap[observation.birdId];
 
+          // padding between images
           return Padding(
             padding: EdgeInsets.only(
               left: index == 0 ? 0 : 4.0,
