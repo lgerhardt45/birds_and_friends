@@ -27,7 +27,12 @@ class PostWidget extends StatelessWidget {
         .toList();
 
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      // consistent padding around all posts
+      padding: const EdgeInsets.only(
+        left: 12.0,
+        right: 12.0,
+        bottom: 24.0,
+      ),
       child: Column(
         // whole Post container
         crossAxisAlignment: CrossAxisAlignment.start,
