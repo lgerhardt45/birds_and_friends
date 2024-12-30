@@ -34,7 +34,7 @@ class PostObservationGallery extends StatelessWidget {
                 Expanded(
                   child: Container(
                     // Image
-                    width: 200,
+                    width: 300,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
                       image: DecorationImage(
