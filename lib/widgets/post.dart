@@ -57,13 +57,10 @@ class PostWidget extends StatelessWidget {
             )
           ]),
           SizedBox(height: 4),
-          SizedBox(
-            height: 200, // Ensure the gallery has a fixed height
-            child: PostObservationGallery(
-              // Post images (observations)
-              observations: postObservations,
-              birdMap: birdMap,
-            ),
+          PostObservationGallery(
+            // Post images (observations)
+            observations: postObservations,
+            birdMap: birdMap,
           ),
           Row(
             // Interaction buttons
