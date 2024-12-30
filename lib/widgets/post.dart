@@ -66,11 +66,17 @@ class PostWidget extends StatelessWidget {
             // Interaction buttons
             children: [
               IconButton(
-                icon: Icon(Icons.thumb_up_sharp),
+                icon: Icon(Icons.favorite),
+                iconSize: 30,
+                padding: EdgeInsets.zero,
                 onPressed: () {
                   // Handle like button press
                 },
               ),
+              IconButton(
+                icon: Icon(Icons.comment),
+                iconSize: 30,
+                padding: EdgeInsets.zero,
               IconButton(
                 icon: Icon(Icons.comment),
                 onPressed: () {
