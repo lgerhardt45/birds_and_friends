@@ -37,31 +37,34 @@ class PostWidget extends StatelessWidget {
         // whole Post container
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(// User info
-              children: [
-            CircleAvatar(
-              backgroundColor: Colors.grey.shade200,
-              child: Icon(
-                Icons.person,
-                color: Colors.grey.shade800,
+          // User avatar, name, post date and location
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.grey.shade200,
+                child: Icon(
+                  Icons.person,
+                  color: Colors.grey.shade800,
+                ),
               ),
-            ),
-            SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  '${DateFormat('dd.MM.yyyy HH:mm').format(post.date)} - ${post.location}',
-                  style: TextStyle(fontSize: 14, color: Colors.blueGrey),
-                ),
-              ],
-            )
-          ]),
-          SizedBox(height: 4),
+              SizedBox(width: 8),
+              // User name, below post date and location
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '${DateFormat('dd.MM.yyyy HH:mm').format(post.date)} - ${post.location}',
+                    style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+                  ),
+                ],
+              )
+            ],
+          ),
+          SizedBox(height: 8),
           PostObservationGallery(
             // Post images (observations)
             observations: postObservations,
@@ -82,15 +85,12 @@ class PostWidget extends StatelessWidget {
                 icon: Icon(Icons.comment),
                 iconSize: 30,
                 padding: EdgeInsets.zero,
-              IconButton(
-                icon: Icon(Icons.comment),
                 onPressed: () {
                   // Handle comment button press
                 },
               ),
             ],
           ),
-          SizedBox(height: 4),
           RichText(
             text: TextSpan(
               style: TextStyle(fontSize: 16, color: Colors.black),
