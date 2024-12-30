@@ -88,7 +88,7 @@ class PostWidget extends StatelessWidget {
               style: TextStyle(fontSize: 16, color: Colors.black),
               children: [
                 TextSpan(
-                  text: '${user?.firstName ?? ''} ',
+                  text: '${user?.firstName ?? ''}  ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
