@@ -9,14 +9,17 @@ import 'models/post.dart';
 import 'models/observation.dart';
 import 'models/bird.dart';
 import 'utils/logger.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure b
   loadDataAndRunApp();
 }
 
 Future<void> loadDataAndRunApp() async {
   try {
+    // load sample data
     List<User> users = await loadSampleUsers();
     Log.info('Sample users loaded: ${users.length}');
 
@@ -28,6 +31,9 @@ Future<void> loadDataAndRunApp() async {
 
     List<Bird> birds = await loadSampleBirds();
     Log.info('Sample birds loaded: ${birds.length}');
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     runApp(
       BirdsAndFriendsApp(
@@ -38,7 +44,7 @@ Future<void> loadDataAndRunApp() async {
       ),
     );
   } catch (e) {
-    Log.error('Error loading sample data', e);
+    Log.error('Error launching app: $e');
   }
 }
 

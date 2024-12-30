@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "598984552614",
+    "project_id": "birds-and-friends-v2",
+    "storage_bucket": "birds-and-friends-v2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598984552614:android:b43e770afbe71b2b570467",
+        "android_client_info": {
+          "package_name": "de.lukasgerhardt.birdsandfriends"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIruO7COib99FcouVbDSRBo1vhMpI84P0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
