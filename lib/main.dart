@@ -89,10 +89,10 @@ class BirdsAndFriendsHome extends StatefulWidget {
   });
 
   @override
-  _BirdsAndFriendsHomeState createState() => _BirdsAndFriendsHomeState();
+  BirdsAndFriendsHomeState createState() => BirdsAndFriendsHomeState();
 }
 
-class _BirdsAndFriendsHomeState extends State<BirdsAndFriendsHome> {
+class BirdsAndFriendsHomeState extends State<BirdsAndFriendsHome> {
   int _selectedIndex = 0; // Tracks the selected tab index
 
   late final List<Widget> _pages;
