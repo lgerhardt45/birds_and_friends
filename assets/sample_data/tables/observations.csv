@@ -1,7 +1,7 @@
 id,birdId,numberBirds,image
-obs-1,bird-1,1,assets/sample_data/images/robert1.jpeg
-obs-2,bird-2,1,assets/sample_data/images/kleiber_mama.jpeg
-obs-3,bird-3,1,assets/sample_data/images/rotkehlchen_mama.jpeg
-obs-4,bird-4,1,assets/sample_data/images/sa_1_weaver_upside_down.jpeg
-obs-5,bird-4,1,assets/sample_data/images/sa_2_weaver_feeding.jpeg
-obs-6,bird-5,1,assets/sample_data/images/sa_3_hadada_ibis.jpeg
+obs-1,bird-1,1,robert.jpeg
+obs-2,bird-2,1,kleiber mama.jpeg
+obs-3,bird-3,1,rotkehlchen mama.jpeg
+obs-4,bird-4,1,sa_1_weaver_upside_down.jpeg
+obs-5,bird-4,1,sa_2_weaver_feeding.jpeg
+obs-6,bird-5,1,sa_3_hadada_ibis.jpeg

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/observation.dart';
 import '../models/bird.dart';
+import 'bird_image.dart';
 
 class PostObservationGallery extends StatelessWidget {
   final List<Observation> observations;
@@ -32,19 +33,7 @@ class PostObservationGallery extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Container(
-                    // Image
-                    width: 300,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      image: DecorationImage(
-                        image: AssetImage(observation.imagePath),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+                BirdImage(observation.imagePath),
                 SizedBox(height: 2),
                 Text(
                   // Bird amount and name
