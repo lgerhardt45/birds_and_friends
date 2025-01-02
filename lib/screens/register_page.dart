@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 import '../widgets/button.dart';
 import '../widgets/text_field.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, this.onTap});
+  const RegisterPage({super.key, this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   // text editing controller
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+  final confirmPasswordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +36,19 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 // welcome back message
-                Text("Welcome back, you've been missed!",
+                Text("Let's create an account for you",
                     style: TextStyle(
                       color: Colors.grey[700],
                     )),
 
-                SizedBox(height: 20),
                 // email input
+                SizedBox(height: 20),
                 BAFTextField(
                   controller: emailTextController,
                   hintText: 'Email',
                   obscureText: false,
                 ),
+
                 // password input
                 SizedBox(height: 12),
                 BAFTextField(
@@ -55,9 +57,18 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                 ),
 
-                SizedBox(height: 20),
+                // confirm password input
+                SizedBox(height: 12),
+                BAFTextField(
+                  controller: confirmPasswordTextController,
+                  hintText: 'Confirm password',
+                  obscureText: true,
+                ),
+
                 // sign in button
-                BAFButton(onTap: widget.onTap, text: 'Sign in'),
+                SizedBox(height: 20),
+                BAFButton(onTap: widget.onTap, text: 'Sign up'),
+
                 // go to register page
                 SizedBox(height: 12),
 
@@ -65,13 +76,13 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account?",
+                      "Already have an account?",
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {},
-                      child: Text('Register'),
+                      child: Text('Sign in'),
                     ),
                   ],
                 )

@@ -6,6 +6,7 @@ import 'screens/profile_page.dart';
 import 'models/user.dart';
 import 'models/post.dart';
 import 'models/bird.dart';
+import 'screens/register_page.dart';
 import 'utils/logger.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -67,7 +68,7 @@ class BirdsAndFriendsApp extends StatelessWidget {
         visualDensity: VisualDensity
             .adaptivePlatformDensity, // Adapts UI density to the platform
       ),
-      home: LoginPage(),
+      home: RegisterPage(),
       // home: BirdsAndFriendsHome(
       //   posts: posts,
       //   birds: birds,
