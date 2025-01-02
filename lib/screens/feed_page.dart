@@ -10,11 +10,10 @@ class BirdsAndFriendsFeedPage extends StatefulWidget {
   const BirdsAndFriendsFeedPage({super.key});
 
   @override
-  _BirdsAndFriendsFeedPageState createState() =>
-      _BirdsAndFriendsFeedPageState();
+  BirdsAndFriendsFeedPageState createState() => BirdsAndFriendsFeedPageState();
 }
 
-class _BirdsAndFriendsFeedPageState extends State<BirdsAndFriendsFeedPage> {
+class BirdsAndFriendsFeedPageState extends State<BirdsAndFriendsFeedPage> {
   late Future<void> _loadDataFuture;
   List<Post> posts = [];
   List<Bird> birds = [];

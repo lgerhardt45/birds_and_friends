@@ -2,13 +2,6 @@ import 'package:flutter/material.dart';
 import 'screens/feed_page.dart';
 import 'screens/new_post_page.dart';
 import 'screens/profile_page.dart';
-import 'models/user.dart';
-import 'models/post.dart';
-import 'models/bird.dart';
-import 'utils/logger.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'utils/firestore_service.dart';
 import 'utils/login_or_register.dart';
 
 void main() {
@@ -29,11 +22,6 @@ class BirdsAndFriendsApp extends StatelessWidget {
             .adaptivePlatformDensity, // Adapts UI density to the platform
       ),
       home: LoginOrRegister(),
-      // home: BirdsAndFriendsHome(
-      //   posts: posts,
-      //   birds: birds,
-      //   users: users,
-      // ), // Sets the default home screen of the app
     );
   }
 }
