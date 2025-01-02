@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/logger.dart';
 import '../widgets/button.dart';
 import '../widgets/text_field.dart';
 
@@ -19,6 +20,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    Log.info("Building RegisterPage");
+
     return Scaffold(
       backgroundColor: Colors.green[300],
       body: SafeArea(
@@ -65,9 +68,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: true,
                 ),
 
-                // sign in button
+                // Register button
                 SizedBox(height: 20),
-                BAFButton(onTap: widget.onTap, text: 'Sign up'),
+                BAFButton(onTap: () {}, text: 'Sign up'),
 
                 // go to register page
                 SizedBox(height: 12),
@@ -81,8 +84,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     SizedBox(width: 8),
                     GestureDetector(
-                      onTap: () {},
-                      child: Text('Sign in'),
+                      onTap: widget.onTap,
+                      child: Text('Login now'),
                     ),
                   ],
                 )

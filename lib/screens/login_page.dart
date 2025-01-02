@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../utils/logger.dart';
 import '../widgets/button.dart';
 import '../widgets/text_field.dart';
 
@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Log.info("Building LoginPage");
     return Scaffold(
       backgroundColor: Colors.green[300],
       body: SafeArea(
@@ -40,13 +41,14 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.grey[700],
                     )),
 
-                SizedBox(height: 20),
                 // email input
+                SizedBox(height: 20),
                 BAFTextField(
                   controller: emailTextController,
                   hintText: 'Email',
                   obscureText: false,
                 ),
+
                 // password input
                 SizedBox(height: 12),
                 BAFTextField(
@@ -55,12 +57,12 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                 ),
 
-                SizedBox(height: 20),
                 // sign in button
-                BAFButton(onTap: widget.onTap, text: 'Sign in'),
+                SizedBox(height: 20),
+                BAFButton(onTap: () {}, text: 'Sign in'),
+
                 // go to register page
                 SizedBox(height: 12),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -70,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(width: 8),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: widget.onTap,
                       child: Text('Register'),
                     ),
                   ],

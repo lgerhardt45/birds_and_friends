@@ -1,4 +1,3 @@
-import 'package:birds_and_friends/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'screens/feed_page.dart';
 import 'screens/new_post_page.dart';
@@ -6,11 +5,11 @@ import 'screens/profile_page.dart';
 import 'models/user.dart';
 import 'models/post.dart';
 import 'models/bird.dart';
-import 'screens/register_page.dart';
 import 'utils/logger.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'utils/firestore_service.dart';
+import 'utils/login_or_register.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,7 +67,7 @@ class BirdsAndFriendsApp extends StatelessWidget {
         visualDensity: VisualDensity
             .adaptivePlatformDensity, // Adapts UI density to the platform
       ),
-      home: RegisterPage(),
+      home: LoginOrRegister(),
       // home: BirdsAndFriendsHome(
       //   posts: posts,
       //   birds: birds,
