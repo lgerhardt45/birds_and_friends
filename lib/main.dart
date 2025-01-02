@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'screens/feed_page.dart';
 import 'screens/new_post_page.dart';
 import 'screens/profile_page.dart';
