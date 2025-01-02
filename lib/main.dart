@@ -1,3 +1,4 @@
+import 'package:birds_and_friends/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'screens/feed_page.dart';
 import 'screens/new_post_page.dart';
@@ -66,11 +67,12 @@ class BirdsAndFriendsApp extends StatelessWidget {
         visualDensity: VisualDensity
             .adaptivePlatformDensity, // Adapts UI density to the platform
       ),
-      home: BirdsAndFriendsHome(
-        posts: posts,
-        birds: birds,
-        users: users,
-      ), // Sets the default home screen of the app
+      home: LoginPage(),
+      // home: BirdsAndFriendsHome(
+      //   posts: posts,
+      //   birds: birds,
+      //   users: users,
+      // ), // Sets the default home screen of the app
     );
   }
 }
