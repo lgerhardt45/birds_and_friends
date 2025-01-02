@@ -1,20 +1,17 @@
 import 'package:birds_and_friends/models/user.dart';
 import 'package:flutter/material.dart';
 import '../models/post.dart';
-import '../models/observation.dart';
 import '../models/bird.dart';
 import '../widgets/post.dart';
 
 class BirdsAndFriendsFeedPage extends StatelessWidget {
   final List<Post> posts;
-  final List<Observation> observations;
   final List<Bird> birds;
   final List<User> users;
 
   const BirdsAndFriendsFeedPage({
     super.key,
     required this.posts,
-    required this.observations,
     required this.birds,
     required this.users,
   });
@@ -44,7 +41,7 @@ class BirdsAndFriendsFeedPage extends StatelessWidget {
 
                 return PostWidget(
                   post: post,
-                  observations: observations,
+                  observations: post.observations,
                   birdMap: birdMap,
                   user: postUser!,
                 );

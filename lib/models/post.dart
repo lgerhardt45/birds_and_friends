@@ -1,10 +1,12 @@
+import '../models/observation.dart';
+
 class Post {
   final String id;
   final DateTime date;
   final String location;
   final String caption;
   final String userId;
-  final List<String> observationIds;
+  final List<Observation> observations;
 
   Post({
     required this.id,
@@ -12,6 +14,6 @@ class Post {
     required this.location,
     required this.caption,
     required this.userId,
-    this.observationIds = const [],
+    this.observations = const [],
   });
 }

@@ -23,9 +23,7 @@ class PostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final postObservations = observations
-        .where((obs) => post.observationIds.contains(obs.id))
-        .toList();
+    final postObservations = observations;
 
     return Padding(
       // consistent padding around all posts
@@ -112,7 +110,7 @@ class PostWidget extends StatelessWidget {
               style: TextStyle(fontSize: 16, color: Colors.black),
               children: [
                 TextSpan(
-                  text: '${user?.firstName ?? ''}  ',
+                  text: '${user.firstName}  ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(

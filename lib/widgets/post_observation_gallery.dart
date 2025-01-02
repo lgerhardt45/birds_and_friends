@@ -33,7 +33,8 @@ class PostObservationGallery extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BirdImage('observation_images/$observation.imagePath'),
+                BirdImage(
+                    imagePath: 'observation_images/${observation.imagePath}'),
                 SizedBox(height: 2),
                 Text(
                   // Bird amount and name

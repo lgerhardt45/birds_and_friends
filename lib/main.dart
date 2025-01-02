@@ -31,9 +31,6 @@ Future<void> loadDataAndRunApp() async {
     List<Post> posts = await loadPostsFromFirestore();
     Log.info('Posts loaded: ${posts.length}');
 
-    List<Observation> observations = await loadObservationsFromFirestore();
-    Log.info('Observations loaded: ${observations.length}');
-
     List<Bird> birds = await loadBirdsFromFirestore();
     Log.info('Birds loaded: ${birds.length}');
 
@@ -41,7 +38,6 @@ Future<void> loadDataAndRunApp() async {
       BirdsAndFriendsApp(
         users: users,
         posts: posts,
-        observations: observations,
         birds: birds,
       ),
     );
@@ -83,11 +79,12 @@ Future<List<Post>> loadPostsFromFirestore() async {
     Log.info(
         'Posts query executed: ${querySnapshot.docs.length} documents found');
 
-    // Map each post to a Post object with observationIds
+    // Map each post to a Post object with observations
     List<Post> posts = [];
     for (var doc in querySnapshot.docs) {
-      // Fetch the observationIds for this post by querying its subcollection
-      List<String> observationIds = await _getObservationIds(doc.id, firestore);
+      // Fetch the observations for this post by querying its subcollection
+      List<Observation> observations =
+          await _getObservations(doc.id, firestore);
 
       // Create the Post object
       posts.add(Post(
@@ -96,7 +93,7 @@ Future<List<Post>> loadPostsFromFirestore() async {
         date: (doc['date'] as Timestamp).toDate(),
         caption: doc['caption'],
         userId: doc['userId'],
-        observationIds: observationIds,
+        observations: observations,
       ));
     }
 
@@ -107,37 +104,31 @@ Future<List<Post>> loadPostsFromFirestore() async {
   }
 }
 
-Future<List<String>> _getObservationIds(
+Future<List<Observation>> _getObservations(
     String postId, FirebaseFirestore firestore) async {
-  // Query the "Observations" subcollection for the given post
-  QuerySnapshot observationSnapshot = await firestore
-      .collection('posts')
-      .doc(postId)
-      .collection('observations')
-      .get();
-
-  // Extract the observation document IDs
-  return observationSnapshot.docs.map((doc) => doc.id).toList();
-}
-
-Future<List<Observation>> loadObservationsFromFirestore() async {
   try {
-    FirebaseFirestore firestore =
-        FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: 'main');
-    QuerySnapshot querySnapshot =
-        await firestore.collection('observations').get();
+    // Query the "Observations" subcollection for the given post
+    QuerySnapshot observationSnapshot = await firestore
+        .collection('posts')
+        .doc(postId)
+        .collection('observations')
+        .get();
+
     Log.info(
-        'Observations query executed: ${querySnapshot.docs.length} documents found');
-    return querySnapshot.docs
-        .map((doc) => Observation(
-              id: doc.id,
-              birdId: doc['birdId'],
-              numberBirds: doc['numberBirds'],
-              imagePath: doc['imagePath'],
-            ))
-        .toList();
+        'Observations query executed for post $postId: ${observationSnapshot.docs.length} documents found');
+
+    // Map each document to an Observation object
+    return observationSnapshot.docs.map((doc) {
+      DocumentReference birdRef = doc['birdId'];
+      return Observation(
+        id: doc.id,
+        birdId: birdRef.id,
+        numberBirds: doc['numberBirds'] as int,
+        imagePath: doc['imagePath'],
+      );
+    }).toList();
   } catch (e) {
-    Log.error('Error loading observations from Firestore: $e');
+    Log.error('Error loading observations for post $postId from Firestore: $e');
     return [];
   }
 }
@@ -166,14 +157,12 @@ Future<List<Bird>> loadBirdsFromFirestore() async {
 class BirdsAndFriendsApp extends StatelessWidget {
   final List<User> users;
   final List<Post> posts;
-  final List<Observation> observations;
   final List<Bird> birds;
 
   const BirdsAndFriendsApp(
       {super.key,
       required this.users,
       required this.posts,
-      required this.observations,
       required this.birds});
 
   @override
@@ -187,7 +176,6 @@ class BirdsAndFriendsApp extends StatelessWidget {
       ),
       home: BirdsAndFriendsHome(
         posts: posts,
-        observations: observations,
         birds: birds,
         users: users,
       ), // Sets the default home screen of the app
@@ -197,14 +185,12 @@ class BirdsAndFriendsApp extends StatelessWidget {
 
 class BirdsAndFriendsHome extends StatefulWidget {
   final List<Post> posts;
-  final List<Observation> observations;
   final List<Bird> birds;
   final List<User> users;
 
   const BirdsAndFriendsHome({
     super.key,
     required this.posts,
-    required this.observations,
     required this.birds,
     required this.users,
   });
@@ -224,7 +210,6 @@ class BirdsAndFriendsHomeState extends State<BirdsAndFriendsHome> {
     _pages = [
       BirdsAndFriendsFeedPage(
         posts: widget.posts,
-        observations: widget.observations,
         birds: widget.birds,
         users: widget.users,
       ),
