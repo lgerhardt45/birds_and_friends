@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:csv/csv.dart';
 import 'screens/feed_page.dart';
 import 'screens/new_post_page.dart';
 import 'screens/profile_page.dart';
@@ -10,6 +9,7 @@ import 'models/observation.dart';
 import 'models/bird.dart';
 import 'utils/logger.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 
 void main() {
@@ -19,21 +19,24 @@ void main() {
 
 Future<void> loadDataAndRunApp() async {
   try {
-    // load sample data
-    List<User> users = await loadSampleUsers();
-    Log.info('Sample users loaded: ${users.length}');
-
-    List<Post> posts = await loadSamplePosts();
-    Log.info('Sample posts loaded: ${posts.length}');
-
-    List<Observation> observations = await loadSampleObservations();
-    Log.info('Sample observations loaded: ${observations.length}');
-
-    List<Bird> birds = await loadSampleBirds();
-    Log.info('Sample birds loaded: ${birds.length}');
+    // Initialize Firebase
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    Log.info('Firebase initialized successfully');
+
+    // Load data from Firestore
+    List<User> users = await loadUsersFromFirestore();
+    Log.info('Users loaded: ${users.length}');
+
+    List<Post> posts = await loadPostsFromFirestore();
+    Log.info('Posts loaded: ${posts.length}');
+
+    List<Observation> observations = await loadObservationsFromFirestore();
+    Log.info('Observations loaded: ${observations.length}');
+
+    List<Bird> birds = await loadBirdsFromFirestore();
+    Log.info('Birds loaded: ${birds.length}');
 
     runApp(
       BirdsAndFriendsApp(
@@ -45,6 +48,118 @@ Future<void> loadDataAndRunApp() async {
     );
   } catch (e) {
     Log.error('Error launching app: $e');
+  }
+}
+
+// Firestore loading functions
+Future<List<User>> loadUsersFromFirestore() async {
+  try {
+    FirebaseFirestore firestore =
+        FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: 'main');
+    QuerySnapshot querySnapshot = await firestore.collection('users').get();
+    Log.info(
+        'Users query executed: ${querySnapshot.docs.length} documents found');
+    return querySnapshot.docs
+        .map((doc) => User(
+              id: doc.id,
+              firstName: doc['firstName'],
+              lastName: doc['lastName'],
+              email: doc['email'],
+            ))
+        .toList();
+  } catch (e) {
+    Log.error('Error loading users from Firestore: $e');
+    return [];
+  }
+}
+
+Future<List<Post>> loadPostsFromFirestore() async {
+  try {
+    FirebaseFirestore firestore =
+        FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: 'main');
+
+    // Fetch the posts
+    QuerySnapshot querySnapshot = await firestore.collection('posts').get();
+    Log.info(
+        'Posts query executed: ${querySnapshot.docs.length} documents found');
+
+    // Map each post to a Post object with observationIds
+    List<Post> posts = [];
+    for (var doc in querySnapshot.docs) {
+      // Fetch the observationIds for this post by querying its subcollection
+      List<String> observationIds = await _getObservationIds(doc.id, firestore);
+
+      // Create the Post object
+      posts.add(Post(
+        id: doc.id,
+        location: doc['location'],
+        date: (doc['date'] as Timestamp).toDate(),
+        caption: doc['caption'],
+        userId: doc['userId'],
+        observationIds: observationIds,
+      ));
+    }
+
+    return posts;
+  } catch (e) {
+    Log.error('Error loading posts from Firestore: $e');
+    return [];
+  }
+}
+
+Future<List<String>> _getObservationIds(
+    String postId, FirebaseFirestore firestore) async {
+  // Query the "Observations" subcollection for the given post
+  QuerySnapshot observationSnapshot = await firestore
+      .collection('posts')
+      .doc(postId)
+      .collection('observations')
+      .get();
+
+  // Extract the observation document IDs
+  return observationSnapshot.docs.map((doc) => doc.id).toList();
+}
+
+Future<List<Observation>> loadObservationsFromFirestore() async {
+  try {
+    FirebaseFirestore firestore =
+        FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: 'main');
+    QuerySnapshot querySnapshot =
+        await firestore.collection('observations').get();
+    Log.info(
+        'Observations query executed: ${querySnapshot.docs.length} documents found');
+    return querySnapshot.docs
+        .map((doc) => Observation(
+              id: doc.id,
+              birdId: doc['birdId'],
+              numberBirds: doc['numberBirds'],
+              imagePath: doc['imagePath'],
+            ))
+        .toList();
+  } catch (e) {
+    Log.error('Error loading observations from Firestore: $e');
+    return [];
+  }
+}
+
+Future<List<Bird>> loadBirdsFromFirestore() async {
+  try {
+    FirebaseFirestore firestore =
+        FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: 'main');
+    QuerySnapshot querySnapshot = await firestore.collection('birds').get();
+    Log.info(
+        'Birds query executed: ${querySnapshot.docs.length} documents found');
+    return querySnapshot.docs
+        .map((doc) => Bird(
+              id: doc.id,
+              germanName: doc['germanName'],
+              englishName: doc['englishName'],
+              scientificName: doc['scientificName'],
+            ))
+        .toList();
+  } catch (e) {
+    Log.error('Error loading birds from Firestore: $e');
+    return [];
   }
 }
 
@@ -148,72 +263,4 @@ class BirdsAndFriendsHomeState extends State<BirdsAndFriendsHome> {
       ),
     );
   }
-}
-
-Future<List<User>> loadSampleUsers() async {
-  final String csvString =
-      await rootBundle.loadString('assets/sample_data/tables/users.csv');
-  final List<List<dynamic>> csvData =
-      const CsvToListConverter(eol: '\n').convert(csvString);
-
-  return csvData.skip(1).map((row) {
-    return User(
-      id: row[0],
-      firstName: row[1],
-      lastName: row[2],
-      email: row[3],
-    );
-  }).toList();
-}
-
-Future<List<Post>> loadSamplePosts() async {
-  final String csvString =
-      await rootBundle.loadString('assets/sample_data/tables/posts.csv');
-  final List<List<dynamic>> csvData =
-      const CsvToListConverter(eol: '\n').convert(csvString);
-
-  return csvData.skip(1).where((row) => row[6] == "TRUE").map((row) {
-    return Post(
-        id: row[0],
-        location: row[1],
-        date: DateTime.parse(row[2]),
-        caption: row[3],
-        userId: row[4],
-        observationIds: row[5].split(','));
-  }).toList();
-}
-
-Future<List<Observation>> loadSampleObservations() async {
-  final String path = 'assets/sample_data/tables/observations.csv';
-  final String csvString = await rootBundle.loadString(path);
-
-  final List<List<dynamic>> csvData =
-      const CsvToListConverter(eol: '\n').convert(csvString);
-
-  final List<Observation> observations = csvData.skip(1).map((row) {
-    return Observation(
-      id: row[0],
-      birdId: row[1],
-      numberBirds: row[2],
-      imagePath: row[3],
-    );
-  }).toList();
-
-  return observations;
-}
-
-Future<List<Bird>> loadSampleBirds() async {
-  final String csvString =
-      await rootBundle.loadString('assets/sample_data/tables/birds.csv');
-  final List<List<dynamic>> csvData =
-      const CsvToListConverter(eol: '\n').convert(csvString);
-
-  return csvData.skip(1).map((row) {
-    return Bird(
-      id: row[0],
-      germanName: row[1],
-      englishName: row[2],
-      scientificName: row[3],
-    );
-  }).toList();
 }
