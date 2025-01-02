@@ -64,6 +64,7 @@ Future<List<User>> loadUsersFromFirestore() async {
               firstName: doc['firstName'],
               lastName: doc['lastName'],
               email: doc['email'],
+              avatarPath: doc['avatarPath'],
             ))
         .toList();
   } catch (e) {

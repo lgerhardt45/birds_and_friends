@@ -5,11 +5,12 @@ import '../models/observation.dart';
 import '../models/bird.dart';
 import 'post_observation_gallery.dart';
 import '../models/user.dart';
+import '../utils/firebase_storage_service.dart';
 
 class PostWidget extends StatelessWidget {
   final Post post;
   final List<Observation> observations;
-  final User? user;
+  final User user;
   final Map<String, Bird> birdMap;
 
   const PostWidget({
@@ -40,12 +41,27 @@ class PostWidget extends StatelessWidget {
           // User avatar, name, post date and location
           Row(
             children: [
-              CircleAvatar(
-                backgroundColor: Colors.grey.shade200,
-                child: Icon(
-                  Icons.person,
-                  color: Colors.grey.shade800,
+              FutureBuilder<String?>(
+                future: FirebaseStorageService.getDownloadUrl(
+                  'user_avatars/${user.avatarPath}',
                 ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    return CircleAvatar(
+                      backgroundColor: Colors.grey.shade200,
+                      backgroundImage: NetworkImage(snapshot.data!),
+                    );
+                  } else {
+                    return CircleAvatar(
+                      backgroundColor: Colors.grey.shade200,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.grey.shade800,
+                      ),
+                    );
+                  }
+                },
               ),
               SizedBox(width: 8),
               // User name, below post date and location
@@ -53,7 +69,7 @@ class PostWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
+                    '${user.firstName} ${user.lastName}',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(

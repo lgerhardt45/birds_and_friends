@@ -46,7 +46,7 @@ class BirdsAndFriendsFeedPage extends StatelessWidget {
                   post: post,
                   observations: observations,
                   birdMap: birdMap,
-                  user: postUser,
+                  user: postUser!,
                 );
               },
             ),
