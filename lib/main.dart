@@ -13,50 +13,11 @@ import 'utils/login_or_register.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  loadDataAndRunApp();
-}
-
-Future<void> loadDataAndRunApp() async {
-  try {
-    // Initialize Firebase
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    Log.info('Firebase initialized successfully');
-
-    // Load data from Firestore using FirestoreService
-    FirestoreService firestoreService = FirestoreService();
-    List<User> users = await firestoreService.loadUsers();
-    Log.info('Users loaded: ${users.length}');
-
-    List<Post> posts = await firestoreService.loadPosts();
-    Log.info('Posts loaded: ${posts.length}');
-
-    List<Bird> birds = await firestoreService.loadBirds();
-    Log.info('Birds loaded: ${birds.length}');
-
-    runApp(
-      BirdsAndFriendsApp(
-        users: users,
-        posts: posts,
-        birds: birds,
-      ),
-    );
-  } catch (e) {
-    Log.error('Error launching app: $e');
-  }
+  runApp(BirdsAndFriendsApp());
 }
 
 class BirdsAndFriendsApp extends StatelessWidget {
-  final List<User> users;
-  final List<Post> posts;
-  final List<Bird> birds;
-
-  const BirdsAndFriendsApp(
-      {super.key,
-      required this.users,
-      required this.posts,
-      required this.birds});
+  const BirdsAndFriendsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +39,7 @@ class BirdsAndFriendsApp extends StatelessWidget {
 }
 
 class BirdsAndFriendsHome extends StatefulWidget {
-  final List<Post> posts;
-  final List<Bird> birds;
-  final List<User> users;
-
-  const BirdsAndFriendsHome({
-    super.key,
-    required this.posts,
-    required this.birds,
-    required this.users,
-  });
+  const BirdsAndFriendsHome({super.key});
 
   @override
   BirdsAndFriendsHomeState createState() => BirdsAndFriendsHomeState();
@@ -102,11 +54,7 @@ class BirdsAndFriendsHomeState extends State<BirdsAndFriendsHome> {
   void initState() {
     super.initState();
     _pages = [
-      BirdsAndFriendsFeedPage(
-        posts: widget.posts,
-        birds: widget.birds,
-        users: widget.users,
-      ),
+      BirdsAndFriendsFeedPage(),
       BirdsAndFriendsNewPostPage(),
       BirdsAndFriendsProfilePage(),
     ];
