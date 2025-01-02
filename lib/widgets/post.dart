@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import '../models/post.dart';
 import '../models/observation.dart';
 import '../models/bird.dart';
-import 'post_observation_gallery.dart';
 import '../models/user.dart';
+import 'post_observation_gallery.dart';
 import '../utils/firebase_storage_service.dart';
 
 class PostWidget extends StatelessWidget {
