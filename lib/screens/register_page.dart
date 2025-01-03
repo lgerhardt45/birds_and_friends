@@ -1,3 +1,4 @@
+import 'package:birds_and_friends/utils/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../utils/logger.dart';
@@ -14,9 +15,50 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   // text editing controller
+  final firstNameTextController = TextEditingController();
+  final lastNameTextController = TextEditingController();
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
+
+  // create user in Firebase method
+  void createUser(
+      {required String firstName,
+      required String lastName,
+      required User firebaseAuthUser}) {
+    Log.info("Creating user in Firestore");
+
+    // get current user
+    final user = firebaseAuthUser;
+
+    // create user in Firestore
+    try {
+      FirestoreService().createUser(
+        uid: user.uid,
+        firstName: firstName,
+        lastName: lastName,
+        email: user.email!,
+      );
+      Log.info("User created in Firestore");
+      // show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("User created successfully"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      Log.error("Failed to create user in Firestore: $e");
+      // show error to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to create user: $e"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+  }
 
   // sign user up
   void signUp() async {
@@ -32,30 +74,51 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Colors.red,
         ),
       );
-    } else {
-      // sign user up w/ email + password
-      try {
-        // sign user up
-        Log.info("Signing up with email: ${emailTextController.text}");
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailTextController.text,
-          password: passwordTextController.text,
-        );
-      } on FirebaseAuthException catch (e) {
-        Log.error("Failed to sign up: $e");
-        // show error to user
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Failed to sign up: ${e.message}"),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      return;
+    }
+    // sign user up w/ email + password
+    try {
+      // sign user up
+      Log.info("Signing up with email: ${emailTextController.text}");
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailTextController.text,
+        password: passwordTextController.text,
+      );
+      Log.info("Signing up with email: ${emailTextController.text}");
+    } on FirebaseAuthException catch (e) {
+      Log.error("Failed to sign up: $e");
+      // show error to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to sign up: ${e.message}"),
+          backgroundColor: Colors.red,
+        ),
+      );
       return;
     }
 
-    // sign user up
-    Log.info("Signing up with email: ${emailTextController.text}");
+    // create user in Firestore
+    try {
+      var firstName = firstNameTextController.text;
+      var lastName = lastNameTextController.text;
+
+      Log.info("Creating user $firstName $lastName in Firestore");
+      createUser(
+          firstName: firstName,
+          lastName: lastName,
+          firebaseAuthUser: FirebaseAuth.instance.currentUser!);
+    } catch (e) {
+      Log.error("Failed to create user: $e");
+      // show error to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to create user: $e"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    return;
   }
 
   @override
@@ -84,8 +147,29 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Colors.grey[700],
                     )),
 
-                // email input
+                // first and last name inputs
                 SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: BAFTextField(
+                        controller: firstNameTextController,
+                        hintText: 'First name',
+                        obscureText: false,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: BAFTextField(
+                        controller: lastNameTextController,
+                        hintText: 'Last name',
+                        obscureText: false,
+                      ),
+                    ),
+                  ],
+                ),
+                // email input
+                SizedBox(height: 12),
                 BAFTextField(
                   controller: emailTextController,
                   hintText: 'Email',
