@@ -10,6 +10,26 @@ class FirestoreService {
   final FirebaseFirestore _firestore =
       FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: 'main');
 
+  void createUser(
+      {required String uid,
+      required String firstName,
+      required String lastName,
+      required String email}) {
+    try {
+      _firestore.collection('users').doc(uid).set({
+        'firstName': firstName,
+        'lastName': lastName,
+        'email': email,
+        'avatarPath': '',
+        'createdAt': FieldValue.serverTimestamp(),
+        'role': 'User', // default User
+      });
+      Log.info('User created in Firestore: ${uid}');
+    } catch (e) {
+      Log.error('Error creating user in Firestore: $e');
+    }
+  }
+
   Future<List<User>> loadUsers() async {
     try {
       QuerySnapshot querySnapshot = await _firestore.collection('users').get();
