@@ -41,21 +41,25 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       Log.info("User created in Firestore");
       // show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("User created successfully"),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("User created successfully"),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
     } catch (e) {
       Log.error("Failed to create user in Firestore: $e");
       // show error to user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Failed to create user: $e"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to create user: $e"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
   }
@@ -68,12 +72,14 @@ class _RegisterPageState extends State<RegisterPage> {
     if (passwordTextController.text != confirmPasswordTextController.text) {
       Log.error("Passwords do not match");
       // show error to user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Passwords do not match"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Passwords do not match"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
     // sign user up w/ email + password
@@ -88,12 +94,14 @@ class _RegisterPageState extends State<RegisterPage> {
     } on FirebaseAuthException catch (e) {
       Log.error("Failed to sign up: $e");
       // show error to user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Failed to sign up: ${e.message}"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to sign up: ${e.message}"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
@@ -110,12 +118,14 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {
       Log.error("Failed to create user: $e");
       // show error to user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Failed to create user: $e"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to create user: $e"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
     return;
