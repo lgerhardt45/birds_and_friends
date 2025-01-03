@@ -24,7 +24,7 @@ class FirestoreService {
         'createdAt': FieldValue.serverTimestamp(),
         'role': 'User', // default User
       });
-      Log.info('User created in Firestore: ${uid}');
+      Log.info('User created in Firestore: $uid');
     } catch (e) {
       Log.error('Error creating user in Firestore: $e');
     }
