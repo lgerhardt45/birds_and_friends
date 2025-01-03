@@ -1,11 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'firebase_options.dart';
 import 'screens/feed_page.dart';
 import 'screens/new_post_page.dart';
 import 'screens/profile_page.dart';
-import 'utils/login_or_register.dart';
+import 'utils/auth/auth.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(BirdsAndFriendsApp());
 }
 
@@ -21,7 +26,8 @@ class BirdsAndFriendsApp extends StatelessWidget {
         visualDensity: VisualDensity
             .adaptivePlatformDensity, // Adapts UI density to the platform
       ),
-      home: LoginOrRegister(),
+      home:
+          AuthPage(), // first show auth page to determine if user is logged in
     );
   }
 }

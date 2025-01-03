@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../utils/logger.dart';
 import '../widgets/button.dart';
@@ -15,6 +16,18 @@ class _LoginPageState extends State<LoginPage> {
   // text editing controller
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+
+  void signIn() async {
+    Log.info("Signing in with email: ${emailTextController.text}");
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailTextController.text,
+        password: passwordTextController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      Log.error("Failed to sign in: ${e.message}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // sign in button
                 SizedBox(height: 20),
-                BAFButton(onTap: () {}, text: 'Sign in'),
+                BAFButton(onTap: signIn, text: 'Sign in'),
 
                 // go to register page
                 SizedBox(height: 12),
