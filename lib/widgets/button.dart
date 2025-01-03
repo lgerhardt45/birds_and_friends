@@ -11,10 +11,10 @@ class BAFButton extends StatefulWidget {
   });
 
   @override
-  _BAFButtonState createState() => _BAFButtonState();
+  BAFButtonState createState() => BAFButtonState();
 }
 
-class _BAFButtonState extends State<BAFButton> {
+class BAFButtonState extends State<BAFButton> {
   Color color = Colors.green[500]!;
 
   @override
