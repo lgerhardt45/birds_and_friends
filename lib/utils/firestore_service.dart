@@ -42,6 +42,7 @@ class FirestoreService {
                 lastName: doc['lastName'],
                 email: doc['email'],
                 avatarPath: doc['avatarPath'],
+                createdAt: doc['createdAt'].toDate(),
               ))
           .toList();
     } catch (e) {

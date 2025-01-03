@@ -6,6 +6,7 @@ class User {
   final String lastName;
   final String email;
   final String? avatarPath;
+  final DateTime createdAt;
   final List<Post> posts;
 
   User({
@@ -14,6 +15,7 @@ class User {
     required this.lastName,
     required this.email,
     this.avatarPath,
+    required this.createdAt,
     this.posts = const [],
   });
 }
