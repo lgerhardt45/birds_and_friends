@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../utils/logger.dart';
 import '../widgets/button.dart';
 import '../widgets/text_field.dart';
@@ -17,6 +17,46 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
+
+  // sign user up
+  void signUp() async {
+    Log.info("Signing up");
+
+    // check if passwords match
+    if (passwordTextController.text != confirmPasswordTextController.text) {
+      Log.error("Passwords do not match");
+      // show error to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Passwords do not match"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      // sign user up w/ email + password
+      try {
+        // sign user up
+        Log.info("Signing up with email: ${emailTextController.text}");
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailTextController.text,
+          password: passwordTextController.text,
+        );
+      } on FirebaseAuthException catch (e) {
+        Log.error("Failed to sign up: $e");
+        // show error to user
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to sign up: ${e.message}"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
+    // sign user up
+    Log.info("Signing up with email: ${emailTextController.text}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // Register button
                 SizedBox(height: 20),
-                BAFButton(onTap: () {}, text: 'Sign up'),
+                BAFButton(onTap: signUp, text: 'Sign up'),
 
                 // go to register page
                 SizedBox(height: 12),

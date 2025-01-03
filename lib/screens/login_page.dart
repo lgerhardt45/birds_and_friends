@@ -26,7 +26,15 @@ class _LoginPageState extends State<LoginPage> {
       );
     } on FirebaseAuthException catch (e) {
       Log.error("Failed to sign in: ${e.message}");
+      displayMessage("Failed to sign in: ${e.message}");
     }
+  }
+
+  void displayMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override
